@@ -86,8 +86,16 @@ CloudWatch Logs -> Subscription Filter -> Lambda (ja3.py) -> WAF Pattern Set
   
 ## Configure CloudWatch Logs
 - Ensure your  WAF logging is enabled
-- Create a Lambda subscription filter and use - Filter Pattern: "{ $.timestamp = * && $.ja3Fingerprint = * }"Target: Lambda function ARN. 
-  Remember to remove the double quotes
+- Create a Lambda subscription filter and use - Filter Pattern below and Target is the AWS Lambda function ARN.
+  
+## CloudWatch Logs Subscription Filter Setup
+
+### Filter Pattern
+Use the following pattern for the subscription filter:
+
+```text
+{ $.timestamp = * && $.ja3Fingerprint = * }
+
 
 ## Deploy Lambda (ja3.py)
 - Fine grained permission
