@@ -22,9 +22,9 @@ CloudWatch Logs -> Subscription Filter -> Lambda (ja3.py) -> WAF Pattern Set
 
 - SNS_TOPIC_ARN=arn:aws:sns:region:account:topic-name
 - ENVIRONMENT=production
-- WAF_PATTERN_SET_NAME=ja3-fingerprints
+- WAF_PATTERN_SET_NAME=XXXXXXX
 - WAF_PATTERN_SET_ID=pattern-set-id
-- WAF_SCOPE=REGIONAL
+- WAF_SCOPE=REGIONAL or CLOUDFRONT
 
 ### Components
 - **CloudWatch Log Group**: Contains WAF logs with JA3 fingerprint information
