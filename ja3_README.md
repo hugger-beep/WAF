@@ -8,6 +8,9 @@ CloudWatch Logs -> Subscription Filter -> Lambda (ja3.py) -> WAF Pattern Set
 -> SNS Topics
 -> CloudWatch Metrics
 
+## Pattern
+e.g  { $.timestamp = * && $.ja3Fingerprint = * }
+
 ### Prerequisites
 - AWS Account with appropriate permissions
 - Python 3.9 or higher
@@ -17,7 +20,7 @@ CloudWatch Logs -> Subscription Filter -> Lambda (ja3.py) -> WAF Pattern Set
   
 ### Components
 - **CloudWatch Log Group**: Contains WAF logs with JA3 fingerprint information
-- **Subscription Filter**: Forwards matching log entries to Lambda e.g  { $.timestamp = * && $.ja3Fingerprint = * }
+- **Subscription Filter**: Forwards matching log entries to Lambda 
 - **Lambda Function**: Processes JA3 fingerprints and updates WAF
 - **WAF Regex Pattern Set**: Stores JA3 fingerprints for blocking
 - **SNS Topic**: Receives alerts about new detections and pattern updates
