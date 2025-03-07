@@ -9,10 +9,7 @@ CloudWatch Logs -> Subscription Filter -> Lambda (ja3.py) -> WAF Pattern Set
 -> CloudWatch Metrics
 
 ## Pattern
-e.g  { $.timestamp = * && $.ja3Fingerprint = * }
 
-
-{ $.timestamp = * && $.ja3Fingerprint = * }
 
 ### Prerequisites
 - AWS Account with appropriate permissions
