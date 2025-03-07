@@ -8,9 +8,6 @@ CloudWatch Logs -> Subscription Filter -> Lambda (ja3.py) -> WAF Pattern Set
 -> SNS Topics
 -> CloudWatch Metrics
 
-## Pattern
-
-
 ### Prerequisites
 - AWS Account with appropriate permissions
 - Python 3.9 or higher
@@ -90,11 +87,7 @@ CloudWatch Logs -> Subscription Filter -> Lambda (ja3.py) -> WAF Pattern Set
   
 ## CloudWatch Logs Subscription Filter Setup
 
-### Filter Pattern
-Use the following pattern for the subscription filter:
 
-```text
-{ $.timestamp = * && $.ja3Fingerprint = * }
 
 
 ## Deploy Lambda (ja3.py)
@@ -111,3 +104,12 @@ Use the following pattern for the subscription filter:
   - Metric publishing
 
 ### Detailed error logging to CloudWatch Logs
+
+
+### Filter Pattern
+Use the following pattern for the subscription filter:
+
+```text
+{ $.timestamp = * && $.ja3Fingerprint = * }
+
+```
