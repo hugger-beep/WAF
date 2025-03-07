@@ -73,3 +73,33 @@ CloudWatch Logs -> Subscription Filter -> Lambda (ja3.py) -> WAF Pattern Set
         }
     ]
 }
+
+
+# Setup Instructions
+## Create WAF Pattern Set
+
+- Create a regex pattern set in AWS WAF and Note the pattern set ID and name
+## SNS Topic
+- Create SNS Topic for alerts and add necessary subscriptions (email, Lambda, etc.)
+- Alert is triggered when JA3 fingerprint is detected - you can modify the threshold
+- Alert includes request details, client information and WAF action
+  
+## Configure CloudWatch Logs
+- Ensure your  WAF logging is enabled
+- Create a Lambda subscription filter and use - Filter Pattern: "{ $.timestamp = * && $.ja3Fingerprint = * }"Target: Lambda function ARN. 
+  Remember to remove the double quotes
+
+## Deploy Lambda (ja3.py)
+- Fine grained permission
+
+## WAF Update Alert
+- Triggered when pattern set is updated based on the threshold set
+
+## Error Handling
+### Comprehensive error handling for:
+  - CloudWatch Logs decoding
+  - WAF pattern set updates
+  - SNS publishing
+  - Metric publishing
+
+### Detailed error logging to CloudWatch Logs
