@@ -17,7 +17,15 @@ CloudWatch Logs -> Subscription Filter -> Lambda (ja3.py) -> WAF Pattern Set
 - AWS WAF configured with a regex pattern set
 - CloudWatch Log Group with WAF logs
 - SNS Topic for alerts
-  
+
+## AWS Lambda Env Variables required 
+
+- ** SNS_TOPIC_ARN=arn:aws:sns:region:account:topic-name
+- ** ENVIRONMENT=production
+- ** WAF_PATTERN_SET_NAME=ja3-fingerprints
+- ** WAF_PATTERN_SET_ID=pattern-set-id
+- ** WAF_SCOPE=REGIONAL
+
 ### Components
 - **CloudWatch Log Group**: Contains WAF logs with JA3 fingerprint information
 - **Subscription Filter**: Forwards matching log entries to Lambda 
