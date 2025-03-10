@@ -5,6 +5,7 @@ This Lambda function automates the detection and blocking of potentially malicio
 
 ## Architecture
 CloudWatch Logs -> Subscription Filter -> Lambda (ja3.py) -> WAF Pattern Set
+
 -> SNS Topics
 -> CloudWatch Metrics
 
