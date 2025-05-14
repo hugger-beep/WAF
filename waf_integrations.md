@@ -115,3 +115,48 @@ flowchart TD
     class EC2,ECS,EKS,ROSA,Lambda,PrivateEC2,PrivateECS,PrivateLambda compute
     class S3 storage
 ```
+
+
+
+``` mermaid
+flowchart LR
+    Users((Internet Users)) --> WAF[AWS WAF]
+    WAF --> ALB[Application Load Balancer]
+    
+    ALB -->|/api/*| APIService[API Service]
+    ALB -->|/admin/*| AdminService[Admin Service]
+    ALB -->|/static/*| StaticContent[Static Content]
+    ALB -->|/* default| DefaultService[Default Service]
+    
+    subgraph "Security Layer"
+        WAF
+    end
+    
+    subgraph "Routing Layer"
+        ALB
+    end
+    
+    subgraph "Application Layer"
+        APIService
+        AdminService
+        StaticContent
+        DefaultService
+    end
+    
+    classDef security fill:#D13212,stroke:#232F3E,color:white
+    classDef routing fill:#FF9900,stroke:#232F3E,color:white
+    classDef app fill:#1EC9E1,stroke:#232F3E,color:white
+    
+    class WAF security
+    class ALB routing
+    class APIService,AdminService,StaticContent,DefaultService app
+```
+
+
+For path-based routing or forwarding based on URL prefixes, you would need to use:
+
+Application Load Balancer (ALB) with path-based routing rules
+
+Amazon API Gateway with path-based routing
+
+Amazon CloudFront with origin path patterns
