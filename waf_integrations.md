@@ -410,3 +410,5 @@ Bots and Scrapers: Automated tools that consume resources or steal data
 Supply Chain Attacks: Compromising dependencies or container images
 
 Zero-Day Exploits: Attacks using previously unknown vulnerabilities
+
+
