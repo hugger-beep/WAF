@@ -494,3 +494,48 @@ flowchart LR
 - [AWS Managed Rules for WAF](https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups.html)
 - [Red Hat OpenShift Service on AWS](https://aws.amazon.com/rosa/)
 - [AWS WAF Security Automations](https://aws.amazon.com/solutions/implementations/aws-waf-security-automations/)
+
+
+
+# AWS WAF WebACL Best Practices for ROSA
+
+This document outlines best practices for implementing AWS WAF WebACLs with Red Hat OpenShift Service on AWS (ROSA).
+
+## One WebACL per Cluster (Recommended)
+
+### Advantages:
+- **Simplified management and monitoring**
+- **Consistent security posture** across the entire cluster
+- **Lower cost** (fewer WebACLs to pay for)
+- **Easier to maintain rule consistency**
+- **Centralized logging and metrics**
+
+### When to use:
+- When security requirements are similar across all applications
+- For smaller organizations with centralized security management
+- When cost optimization is important
+- For initial deployments before fine-tuning security needs
+
+## Multiple WebACLs (Per Namespace/Application)
+
+### Advantages:
+- **More granular security controls**
+- **Different security policies** for different applications
+- **Ability to customize rules** for specific application needs
+- **Isolation between teams/applications**
+- **Reduced blast radius** if configuration issues occur
+
+### When to use:
+- For multi-tenant environments with different security requirements
+- When different teams manage different applications
+- For applications with varying compliance requirements
+- When some applications need specialized protection rules
+
+## Best Practice Recommendation
+
+For most ROSA deployments, start with **one WebACL per cluster** attached to your ALB/CloudFront distribution, then:
+
+1. Use **path-based conditions** within the WebACL to apply different rule groups to different applications/namespaces
+2. Implement **scope-down statements** to target specific rules to specific paths
+3. Consider multiple WebACLs only when security requirements significantly differ between applications
+4. Evaluate **cost vs. security granularity** tradeoffs for your specific use case
