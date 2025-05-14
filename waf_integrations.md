@@ -345,10 +345,68 @@ flowchart LR
     class ALB,API,Web,Adm,Auth,Static,Metrics routing
     class REST,GraphQL,gRPC,Portal,Website,Mobile,Dashboard,Config,Users,OAuth,SAML,MFA,Images,Docs,Prometheus,Grafana rosa
 ```
-For path-based routing or forwarding based on URL prefixes, you would need to use:
+##### For path-based routing or forwarding based on URL prefixes, you would need to use:
 
-Application Load Balancer (ALB) with path-based routing rules
+    Application Load Balancer (ALB) with path-based routing rules
 
-Amazon API Gateway with path-based routing
+    Amazon API Gateway with path-based routing
 
-Amazon CloudFront with origin path patterns
+    Amazon CloudFront with origin path patterns
+
+
+##### Common Security Attacks on Externally Exposed ROSA Workloads
+
+##### Application Layer Attacks
+SQL Injection: Attackers insert malicious SQL code into application inputs
+
+Cross-Site Scripting (XSS): Injecting client-side scripts into web pages viewed by others
+
+Cross-Site Request Forgery (CSRF): Forcing users to execute unwanted actions
+
+Command Injection: Executing arbitrary commands on the host operating system
+
+Insecure Deserialization: Exploiting flaws in object serialization/deserialization
+
+##### API Security Threats
+API Abuse: Excessive API calls causing resource exhaustion
+
+Broken Authentication: Exploiting weak authentication mechanisms
+
+Broken Authorization: Accessing resources without proper permissions
+
+Improper Asset Management: Attacking undocumented or unprotected API endpoints
+
+Insufficient Logging: Attacks going undetected due to poor monitoring
+
+##### Infrastructure Attacks
+
+DDoS Attacks: Overwhelming services with traffic
+
+Container Escape: Breaking out of container isolation
+
+Kubernetes API Server Attacks: Unauthorized access to the control plane
+
+Credential Theft: Stealing service account tokens or credentials
+
+Privilege Escalation: Gaining higher permissions than intended
+
+##### Network-Level Attacks
+Man-in-the-Middle: Intercepting and potentially altering communications
+
+Port Scanning: Discovering open ports and services
+
+DNS Poisoning: Redirecting traffic to malicious endpoints
+
+TLS Vulnerabilities: Exploiting weaknesses in encryption
+
+##### Other Common Threats
+
+Brute Force Attacks: Attempting to guess credentials
+
+Credential Stuffing: Using leaked credentials from other breaches
+
+Bots and Scrapers: Automated tools that consume resources or steal data
+
+Supply Chain Attacks: Compromising dependencies or container images
+
+Zero-Day Exploits: Attacks using previously unknown vulnerabilities
