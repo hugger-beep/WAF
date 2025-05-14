@@ -216,6 +216,94 @@ flowchart LR
     class APIGateway,ALB,EC2,Lambdas,Containers compute
     class S3Bucket storage
 ```
+
+``` mermaid
+
+flowchart TD
+    Users((Internet Users)) --> WAF[AWS WAF]
+    WAF --> ALB[Application Load Balancer]
+    
+    subgraph "Security Layer"
+        WAF -->|SQL Injection Protection| SQLi[SQL Injection Rules]
+        WAF -->|XSS Protection| XSS[XSS Protection Rules]
+        WAF -->|Rate Limiting| RateLimit[Rate Limiting Rules]
+        WAF -->|Bot Control| BotControl[Bot Control Rules]
+        WAF -->|Geo Restrictions| GeoBlock[Geographic Restrictions]
+        WAF -->|IP Reputation| IPRep[IP Reputation Lists]
+    end
+    
+    ALB -->|/api/v1/*| APIRoutes[API Routes]
+    ALB -->|/app/*| WebAppRoutes[Web App Routes]
+    ALB -->|/admin/*| AdminRoutes[Admin Routes]
+    ALB -->|/auth/*| AuthRoutes[Auth Routes]
+    ALB -->|/static/*| StaticRoutes[Static Content Routes]
+    ALB -->|/metrics/*| MetricsRoutes[Metrics Routes]
+    
+    subgraph "ROSA Cluster"
+        APIRoutes --> APIServices[API Microservices]
+        WebAppRoutes --> WebFrontends[Web Frontends]
+        AdminRoutes --> AdminPortals[Admin Portals]
+        AuthRoutes --> AuthServices[Authentication Services]
+        StaticRoutes --> StaticContent[Static Content Servers]
+        MetricsRoutes --> Monitoring[Monitoring Services]
+        
+        subgraph "API Workloads"
+            APIServices --> |REST| RESTAPIs[REST APIs]
+            APIServices --> |GraphQL| GraphQLAPIs[GraphQL APIs]
+            APIServices --> |gRPC| GRPCAPIs[gRPC Services]
+        end
+        
+        subgraph "Web Workloads"
+            WebFrontends --> CustomerPortal[Customer Portal]
+            WebFrontends --> PublicWebsite[Public Website]
+            WebFrontends --> MobileBackend[Mobile App Backend]
+        end
+        
+        subgraph "Admin Workloads"
+            AdminPortals --> InternalDashboard[Internal Dashboard]
+            AdminPortals --> ConfigManagement[Configuration Management]
+            AdminPortals --> UserManagement[User Management]
+        end
+        
+        subgraph "Auth Workloads"
+            AuthServices --> OAuth[OAuth Provider]
+            AuthServices --> SAML[SAML Integration]
+            AuthServices --> MFA[MFA Services]
+        end
+        
+        subgraph "Static Workloads"
+            StaticContent --> Images[Image Assets]
+            StaticContent --> Documents[Document Assets]
+            StaticContent --> Downloads[Downloads]
+        end
+        
+        subgraph "Monitoring Workloads"
+            Monitoring --> Prometheus[Prometheus]
+            Monitoring --> Grafana[Grafana]
+            Monitoring --> Jaeger[Jaeger Tracing]
+        end
+    end
+    
+    classDef security fill:#D13212,stroke:#232F3E,color:white
+    classDef routing fill:#FF9900,stroke:#232F3E,color:white
+    classDef rosa fill:#EE0000,stroke:#232F3E,color:white
+    classDef api fill:#1EC9E1,stroke:#232F3E,color:white
+    classDef web fill:#3F8624,stroke:#232F3E,color:white
+    classDef admin fill:#8C4FFF,stroke:#232F3E,color:white
+    classDef auth fill:#FF9D00,stroke:#232F3E,color:white
+    classDef static fill:#7AA116,stroke:#232F3E,color:white
+    classDef monitoring fill:#527FFF,stroke:#232F3E,color:white
+    
+    class WAF,SQLi,XSS,RateLimit,BotControl,GeoBlock,IPRep security
+    class ALB,APIRoutes,WebAppRoutes,AdminRoutes,AuthRoutes,StaticRoutes,MetricsRoutes routing
+    class ROSA rosa
+    class APIServices,RESTAPIs,GraphQLAPIs,GRPCAPIs api
+    class WebFrontends,CustomerPortal,PublicWebsite,MobileBackend web
+    class AdminPortals,InternalDashboard,ConfigManagement,UserManagement admin
+    class AuthServices,OAuth,SAML,MFA auth
+    class StaticContent,Images,Documents,Downloads static
+    class Monitoring,Prometheus,Grafana,Jaeger monitoring
+```
 For path-based routing or forwarding based on URL prefixes, you would need to use:
 
 Application Load Balancer (ALB) with path-based routing rules
