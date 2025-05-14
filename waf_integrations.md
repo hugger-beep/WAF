@@ -412,3 +412,85 @@ Supply Chain Attacks: Compromising dependencies or container images
 Zero-Day Exploits: Attacks using previously unknown vulnerabilities
 
 
+# AWS WAF Protection for ROSA Workloads
+
+This document outlines how AWS WAF can protect Red Hat OpenShift Service on AWS (ROSA) workloads from common security attacks.
+
+## Table of Contents
+- [Application Layer Attacks](#application-layer-attacks)
+- [API Security Threats](#api-security-threats)
+- [Infrastructure Attacks](#infrastructure-attacks)
+- [Network-Level Attacks](#network-level-attacks)
+- [Other Common Threats](#other-common-threats)
+
+## Application Layer Attacks
+
+| Attack Type | AWS WAF Protection |
+|-------------|-------------------|
+| **SQL Injection** | • AWS Managed Rules: SQL Database Rule Group<br>• AWS Managed Rules: Core Rule Set (CRS) - SQLi rules<br>• Custom regex pattern matching for SQL keywords |
+| **Cross-Site Scripting (XSS)** | • AWS Managed Rules: Core Rule Set (CRS) - XSS rules<br>• Custom regex pattern matching for script tags<br>• Body inspection for JavaScript patterns |
+| **Cross-Site Request Forgery (CSRF)** | • Custom header inspection rules<br>• Regex pattern matching for referrer headers<br>• Rate-based rules per IP for suspicious patterns |
+| **Command Injection** | • AWS Managed Rules: Linux OS Rule Group<br>• AWS Managed Rules: POSIX OS Rule Group<br>• Custom regex for command patterns |
+| **Insecure Deserialization** | • AWS Managed Rules: PHP Application Rule Group<br>• Custom inspection of content types<br>• Size constraint rules for serialized objects |
+
+## API Security Threats
+
+| Attack Type | AWS WAF Protection |
+|-------------|-------------------|
+| **API Abuse** | • Rate-based rules per IP address<br>• Rate-based rules per session token<br>• AWS Managed Rules: Bot Control Rule Group |
+| **Broken Authentication** | • AWS Managed Rules: Known Bad Inputs Rule Group<br>• Custom header inspection for authentication tokens<br>• Rate-based rules for failed authentication attempts |
+| **Broken Authorization** | • Custom rules for path traversal patterns<br>• AWS Managed Rules: Core Rule Set (CRS) - Path traversal rules<br>• Header inspection for authorization tokens |
+| **Improper Asset Management** | • Custom rules for blocking undocumented endpoints<br>• Regex pattern matching for path structures<br>• IP-based access control for admin endpoints |
+| **Insufficient Logging** | • AWS WAF logging to CloudWatch Logs<br>• AWS WAF logging to S3<br>• AWS WAF logging to Kinesis Data Firehose |
+
+## Infrastructure Attacks
+
+| Attack Type | AWS WAF Protection |
+|-------------|-------------------|
+| **DDoS Attacks** | • Rate-based rules per IP address<br>• AWS Shield integration<br>• AWS Managed Rules: Anonymous IP List Rule Group |
+| **Container Escape** | • AWS Managed Rules: Linux OS Rule Group<br>• Custom rules for container escape patterns<br>• Path traversal detection |
+| **Kubernetes API Server Attacks** | • IP-based access control rules<br>• Geo-restriction rules<br>• Rate-based rules for API server endpoints |
+| **Credential Theft** | • AWS Managed Rules: Known Bad Inputs Rule Group<br>• Custom rules for credential exposure patterns<br>• Rate-based rules for authentication endpoints |
+| **Privilege Escalation** | • AWS Managed Rules: Admin Protection Rule Group<br>• Custom rules for admin paths<br>• IP-based access control for sensitive operations |
+
+## Network-Level Attacks
+
+| Attack Type | AWS WAF Protection |
+|-------------|-------------------|
+| **Man-in-the-Middle** | • Custom header inspection for secure headers<br>• AWS Managed Rules: Core Rule Set (CRS)<br>• TLS configuration enforcement (via CloudFront) |
+| **Port Scanning** | • Rate-based rules per IP address<br>• AWS Managed Rules: Anonymous IP List Rule Group<br>• AWS Shield integration |
+| **DNS Poisoning** | • Limited direct protection (better handled by Route 53)<br>• Custom header inspection for host headers<br>• IP reputation filtering |
+| **TLS Vulnerabilities** | • Limited direct protection (better handled by CloudFront/ALB)<br>• Custom header inspection for secure headers<br>• Protocol version enforcement (via CloudFront) |
+
+## Other Common Threats
+
+| Attack Type | AWS WAF Protection |
+|-------------|-------------------|
+| **Brute Force Attacks** | • Rate-based rules per IP address<br>• Rate-based rules for login endpoints<br>• AWS Managed Rules: Bot Control Rule Group |
+| **Credential Stuffing** | • AWS Managed Rules: Bot Control Rule Group<br>• Rate-based rules per IP address<br>• CAPTCHA integration |
+| **Bots and Scrapers** | • AWS Managed Rules: Bot Control Rule Group<br>• AWS Managed Rules: Account Takeover Prevention (ATP)<br>• Rate-based rules with CAPTCHA action |
+| **Supply Chain Attacks** | • Limited direct protection<br>• AWS Managed Rules: Core Rule Set (CRS)<br>• Custom rules for dependency inclusion patterns |
+| **Zero-Day Exploits** | • AWS Managed Rules: Core Rule Set (CRS)<br>• Rate-based rules for anomalous traffic<br>• Regular rule updates from AWS Threat Intelligence |
+
+## Implementation Architecture
+
+For a visual representation of how AWS WAF protects ROSA workloads, refer to the architecture diagrams below:
+
+### CloudFront with WAF for ROSA
+```mermaid
+flowchart LR
+    Users((Users)) --> WAF[WAF] --> CloudFront[CloudFront] --> ALB[ALB] --> ROSA[ROSA Cluster]
+```
+
+### ALB with WAF for ROSA
+```mermaid
+flowchart LR
+    Users((Users)) --> WAF[WAF] --> ALB[ALB] --> ROSA[ROSA Cluster]
+```
+
+## Additional Resources
+
+- [AWS WAF Documentation](https://docs.aws.amazon.com/waf/)
+- [AWS Managed Rules for WAF](https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups.html)
+- [Red Hat OpenShift Service on AWS](https://aws.amazon.com/rosa/)
+- [AWS WAF Security Automations](https://aws.amazon.com/solutions/implementations/aws-waf-security-automations/)
