@@ -116,7 +116,7 @@ flowchart TD
     class S3 storage
 ```
 
-
+Application Load Balancer (ALB) with path-based routing rules
 
 ``` mermaid
 flowchart LR
@@ -151,8 +151,71 @@ flowchart LR
     class ALB routing
     class APIService,AdminService,StaticContent,DefaultService app
 ```
+AWS WAF with API Gateway Path-Based Routing
+``` mermaid
 
+flowchart LR
+    Users((Internet Users)) --> WAF[AWS WAF]
+    WAF --> APIGW[Amazon API Gateway]
+    
+    APIGW -->|/v1/users/*| UsersLambda[Users Lambda]
+    APIGW -->|/v1/products/*| ProductsLambda[Products Lambda]
+    APIGW -->|/v1/orders/*| OrdersLambda[Orders Lambda]
+    APIGW -->|/admin/*| AdminService[Admin Service]
+    
+    subgraph "Security Rules"
+        WAF -->|Rate limiting on /v1/* paths| RateLimit[Rate Limiting Rules]
+        WAF -->|SQL injection protection on /v1/users/*| SQLi[SQL Injection Rules]
+        WAF -->|IP restriction on /admin/*| IPRestrict[IP Restriction Rules]
+    end
+    
+    classDef security fill:#D13212,stroke:#232F3E,color:white
+    classDef routing fill:#FF9900,stroke:#232F3E,color:white
+    classDef compute fill:#1EC9E1,stroke:#232F3E,color:white
+    
+    class WAF,RateLimit,SQLi,IPRestrict security
+    class APIGW routing
+    class UsersLambda,ProductsLambda,OrdersLambda,AdminService compute
+```
+AWS WAF with CloudFront Path-Based Routing
 
+``` mermaid
+
+flowchart LR
+    Users((Internet Users)) --> WAF[AWS WAF]
+    WAF --> CloudFront[Amazon CloudFront]
+    
+    CloudFront -->|/api/*| APIOrigin[API Origin]
+    CloudFront -->|/static/*| S3Origin[S3 Static Content]
+    CloudFront -->|/app/*| AppOrigin[Web App Origin]
+    CloudFront -->|/* default| DefaultOrigin[Default Origin]
+    
+    subgraph "Security Layer"
+        WAF -->|Bot control on all paths| BotControl[Bot Control Rules]
+        WAF -->|XSS protection on /app/*| XSSProtect[XSS Protection Rules]
+        WAF -->|Rate limiting on /api/*| APIRateLimit[API Rate Limiting]
+    end
+    
+    subgraph "Origin Configuration"
+        APIOrigin --> APIGateway[API Gateway]
+        S3Origin --> S3Bucket[S3 Bucket]
+        AppOrigin --> ALB[Application Load Balancer]
+        DefaultOrigin --> EC2[EC2 Instance]
+        
+        APIGateway -->|Internal routing| Lambdas[Lambda Functions]
+        ALB -->|Internal routing| Containers[Container Services]
+    end
+    
+    classDef security fill:#D13212,stroke:#232F3E,color:white
+    classDef cdn fill:#FF9900,stroke:#232F3E,color:white
+    classDef compute fill:#1EC9E1,stroke:#232F3E,color:white
+    classDef storage fill:#3F8624,stroke:#232F3E,color:white
+    
+    class WAF,BotControl,XSSProtect,APIRateLimit security
+    class CloudFront cdn
+    class APIGateway,ALB,EC2,Lambdas,Containers compute
+    class S3Bucket storage
+```
 For path-based routing or forwarding based on URL prefixes, you would need to use:
 
 Application Load Balancer (ALB) with path-based routing rules
