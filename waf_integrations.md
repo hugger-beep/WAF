@@ -304,6 +304,47 @@ flowchart TD
     class StaticContent,Images,Documents,Downloads static
     class Monitoring,Prometheus,Grafana,Jaeger monitoring
 ```
+
+``` mermaid
+
+flowchart LR
+    Users((Users)) --> WAF[WAF]
+    WAF --> ALB[ALB]
+    
+    subgraph "Security"
+        WAF --> SQLi[SQLi]
+        WAF --> XSS[XSS]
+        WAF --> Rate[Rate Limit]
+        WAF --> Bot[Bot Control]
+        WAF --> Geo[Geo Block]
+        WAF --> IP[IP Rep]
+        WAF --> Admin[Admin Protection]
+    end
+    
+    ALB -->|/api| API[API]
+    ALB -->|/app| Web[Web]
+    ALB -->|/admin| Adm[Admin]
+    ALB -->|/auth| Auth[Auth]
+    ALB -->|/static| Static[Static]
+    ALB -->|/metrics| Metrics[Metrics]
+    
+    subgraph "ROSA"
+        API --> REST & GraphQL & gRPC
+        Web --> Portal & Website & Mobile
+        Adm --> Dashboard & Config & Users
+        Auth --> OAuth & SAML & MFA
+        Static --> Images & Docs
+        Metrics --> Prometheus & Grafana
+    end
+    
+    classDef security fill:#D13212,stroke:#232F3E,color:white
+    classDef routing fill:#FF9900,stroke:#232F3E,color:white
+    classDef rosa fill:#EE0000,stroke:#232F3E,color:white
+    
+    class WAF,SQLi,XSS,Rate,Bot,Geo,IP,Admin security
+    class ALB,API,Web,Adm,Auth,Static,Metrics routing
+    class REST,GraphQL,gRPC,Portal,Website,Mobile,Dashboard,Config,Users,OAuth,SAML,MFA,Images,Docs,Prometheus,Grafana rosa
+```
 For path-based routing or forwarding based on URL prefixes, you would need to use:
 
 Application Load Balancer (ALB) with path-based routing rules
